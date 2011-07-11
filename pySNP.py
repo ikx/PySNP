@@ -10,7 +10,6 @@ def request(action):
     sock.connect((host, port))
     sock.send(action)
     print sock.recv(1024), action
-    #print action
     sock.close()
 
 def snRegister (sig, title, icon="", password=""):
@@ -43,20 +42,7 @@ def snNotify (sig, title, text, icon="", timeout="10", uid="", password=""):
         action = action + "&uid=" + uid
     if password != "":
         action = action + "&password=" + password
-        
-##    action = ("snp://notify?app-sig=" + sig + "&title=" + title + "&text=" +
-##              text + "&icon=" + icon + "&timeout=" + timeout + "&uid=" + uid +
-##              "&password=" + password)
     request(action)
-    
-'''
-def snNotify (sig, title, text, icon, timeout, uid, password):
-    print "Snarl: Notify"
-    action = ("snp://notify?app-sig=" + sig + "&title=" + title + "&text=" +
-              text + "&icon=" + icon + "&timeout=" + timeout + "&uid=" + uid +
-              "&password=" + password)
-    request(action)
-'''
 
 def snVersion():
     print "Snarl: Version"
