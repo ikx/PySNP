@@ -1,14 +1,15 @@
-import pySNP
+import pySNP    
 
-sig = "application/python_test"
-title = "Python Test"
-icon = "!system-info"
-text = "Hello world"
-timeout = "10"
+sig = "sig"
+title = "title"
+text = "text"
+icon = ""
+timeout = ""
+priority = ""
 uid = ""
 password = ""
 
-pySNP.snRegister(sig, title)
-pySNP.snNotify(sig, title, text)
+pySNP.snRegister(sig, title, icon, password)
+pySNP.snNotify(sig, title, text, icon, timeout, priority, uid, password)
 pySNP.snVersion()
-pySNP.snUnregister(sig)
+pySNP.snUnregister(sig, password)
