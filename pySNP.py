@@ -11,27 +11,35 @@ def request(snp):
     print sock.recv(1024), snp
     sock.close()
 
-def action(snp, data, value):
-    for v, d in zip(value, data):
-        if v != "":
-            r = d + v
-            snp = snp + r
+def action(snp, required, data, value):
+    for r, d, v in zip(required, data, value):
+        if r != "" and v != "":
+            q = d + v
+            snp = snp + q
+        elif r != "" and v == "":
+            print "Snarl Error: '%s' is missing." % d
+            #break
+        elif v != "":
+            q = d + v
+            snp = snp + q
     request(snp)
 
 def snRegister(sig, token, title, icon, password):
     print "Snarl: Register"
     snp = "snp://register?"
-    data = ['app-sig=', '&token=', '&title=', '&icon=', '&password=']
+    required = ["app-sig=", "",  "&title=", "", ""]
+    data = ["app-sig=", "&token=", "&title=", "&icon=", "&password="]
     value = [sig, token, title, icon, password]
-    action(snp, data, value)
+    action(snp, required, data, value)
 
 def snNotify(sig, token, title, text, icon, timeout, priority, uid, password):
     print "Snarl: Notify"
     snp = "snp://notify?"
-    data = ['app-sig=', '&token=','&title=', '&text=', '&icon=', '&timeout=',
-            '&priority=', '&uid=', '&password=']
+    required = ["app-sig=", "",  "&title=", "&text=", "", "", "", "", ""]
+    data = ["app-sig=", "&token=","&title=", "&text=", "&icon=", "&timeout=",
+            "&priority=", "&uid=", "&password="]
     value = [sig, token, title, text, icon, timeout, priority, uid, password]
-    action(snp, data, value)
+    action(snp, required, data, value)
 
 def snVersion():
     print "Snarl: Version"
@@ -41,6 +49,7 @@ def snVersion():
 def snUnregister(sig, token, password):
     print "Snarl: Unregister"
     snp = "snp://unregister?"
-    data = ['app-sig=', '&token=', '&password=']
+    required = ["app-sig=", "", ""]
+    data = ["app-sig=", "&token=", "&password="]
     value = [sig, token, password]
-    action(snp, data, value)
+    action(snp, required, data, value)
