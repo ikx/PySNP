@@ -15,4 +15,4 @@ pySNP.snNotify(sig, token, title, text, icon, timeout, priority, uid, password)
 pySNP.snVersion()
 pySNP.snUnregister(sig, token, password)
 
-x = raw_input('Hit ANY key to exit')
+#x = raw_input('Hit ANY key to exit')
