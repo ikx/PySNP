@@ -1,6 +1,6 @@
 import pySNP    
 
-sig = 'SIG'
+sig = ''
 uid = 'UID'
 password = ''
 title = 'TITLE'

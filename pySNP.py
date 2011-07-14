@@ -22,8 +22,9 @@ def response(sock, snp):
     print snp
     print ''
 
-def process(snp, data, req, value):
+def process(action, data, req, value):
     err = error(False, '0', '')
+    snp = 'snp://' + action
     param = ''
 
     # Checks if data is required and if values are empty
@@ -53,44 +54,44 @@ def error(status, code, obj):
         return True
     else:
         print 'Error: Unknown'
-        return False
+        return True
 
 def snRegister(sig, password, title, icon):
     print 'Snarl: Register'
-    snp = 'snp://register'
+    action = 'register'
     data = ['app-sig=', 'password=', 'title=', 'icon=']
     req = [True, False, True, False]
     value = [sig, password, title, icon]
-    process(snp, data, req, value)
+    process(action, data, req, value)
 
 def snNotify(sig, uid, password, title, text, icon, cid, timeout, priority):
     print 'Snarl: Notify'
-    snp = 'snp://notify'
+    action = 'notify'
     data = ['app-sig=', 'uid=', 'password=', 'title=', 'text=', 'icon=', 'id=', 'timeout=', 'priority=']
     req = [True, False, False, True, True, False, False, False, False]
     value = [sig, uid, password, title, text, icon, cid, timeout, priority]
-    process(snp, data, req, value)
+    process(action, data, req, value)
 
 def snAddClass(sig, password, title, text, icon, cid, name, enabled):
     print 'Snarl: AddClass'
-    snp = 'snp://addclass'
+    action = 'addclass'
     data = ['app-sig=', 'password=', 'title=', 'text=', 'icon=', 'id=', 'name=', 'enabled=']
     req = [True, False, False, False, False, True, True, False]
     value = [sig, password, title, text, icon, cid, name, enabled]
-    process(snp, data, req, value)
+    process(action, data, req, value)
 
 def snVersion():
     print 'Snarl: Version'
-    snp = 'snp://version'
+    action = 'version'
     data = []
     req = []
     value = []
-    process(snp, data, req, value)
+    process(action, data, req, value)
 
 def snUnregister(sig, password):
     print 'Snarl: Unregister'
-    snp = 'snp://unregister'
+    action = 'unregister'
     data = ['app-sig=', 'password=']
     req = [True, False]
     value = [sig, password]
-    process(snp, data, req, value)
+    process(action, data, req, value)
