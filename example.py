@@ -1,8 +1,8 @@
 import pySNP    
 
-sig = ''
+sig = 'SIG'
 uid = 'UID'
-password = ''
+password = 'PASSWORD'
 title = 'TITLE'
 text = 'TEXT'
 icon = 'ICON'
@@ -18,4 +18,4 @@ pySNP.snAddClass(sig, password, title, text, icon, cid, name, enabled)
 pySNP.snVersion()
 pySNP.snUnregister(sig, password)
 
-x = raw_input('Hit ANY key to exit')
+#x = raw_input('Hit ANY key to exit')
