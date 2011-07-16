@@ -1,2 +1,8 @@
 Very basic, incomplete, and written with a very limited knowlendge of python.
 Any suggestions and/or help is very welcome.
+
+TODO:
+- improve error system
+- move into class
+- add more actions
+- simplify code where possible
