@@ -13,16 +13,16 @@ def _request(snp, errors):
     try:
         sock.connect((ip, port))
         sock.send(snp + '\r\n')
-        _response(sock, snp, errors)
+        recv = sock.recv(1024).rstrip('\r\n')
         sock.close()
+        _response(recv, errors, snp)
     except:
         errors = _error(1, 'noserver', None, None)
         _error(2, None, errors, None)
     print ''
 
-def _response(sock, snp, errors):
-    resp = sock.recv(1024).rstrip('\r\n')
-    print resp
+def _response(recv, errors, snp):
+    print recv
     _error(2, None, errors, None)
     print snp
 
