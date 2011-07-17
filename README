@@ -1,8 +1,45 @@
-Very basic, incomplete, and written with a very limited knowlendge of python.
-Any suggestions and/or help is very welcome.
+### About
+pySNP was created to help me learn python and support [Snarl](http://www.fullphat.net/) at the same time. It communicates with Snarl via [SNP 2.0](http://sourceforge.net/apps/mediawiki/snarlwin/index.php?title=SNP_2.0_API).
 
-TODO:
-- improve error system
-- move into class
-- add more actions
-- simplify code where possible
+### Actions:
+* **snRegister**
+  * app-sig _(Required)_
+  * title _(Required)_
+  * icon _(Optional)_
+  * password _(Optional)_
+* **snNotify**
+  * app-sig _(Required)_
+  * title _(Required)_
+  * text _(Required)_
+  * icon _(Optional)_
+  * password _(Optional)_
+  * id _(Optional)_
+  * uid _(Optional)_
+  * timeout _(Optional)_
+  * priority _(Optional)_
+* **snAddClass**
+  * app-sig _(Required)_
+  * id _(Required)_
+  * name _(Required)_
+  * title _(Optional)_
+  * text _(Optional)_
+  * icon _(Optional)_
+  * password _(Optional)_
+  * enabled _(Optional)_
+* **snVersion**
+* **snUnregister**
+  * app-sig _(Required)_
+  * password _(Optional)_
+ 
+### How to use:
+Start by importing pySNP.
+
+Example:
+
+    import pySNP
+
+Anything in the list above that is marked _"Required"_, the value of it can go directly inside quotations inside the function call. They NEED to be in the order listed above.
+
+### TODO:
+* move into class
+* add more actions
