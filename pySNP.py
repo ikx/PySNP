@@ -3,59 +3,68 @@
 import socket
 
 __author__ = 'Shawn McTear'
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 ip = '127.0.0.1'
 port = 9887
 
-def request(snp, err_msgs):
+def _request(snp, errors):
     sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     try:
         sock.connect((ip, port))
         sock.send(snp + '\r\n')
-        response(sock, snp, err_msgs)
+        _response(sock, snp, errors)
+        sock.close()
     except:
-        #TODO: improve error system for wider variety of errors
-        print "*Error: Can't connect to Snarl.*\n"
-    sock.close()
+        errors = _error(1, 'noserver', None, None)
+        _error(2, None, errors, None)
+    print ''
 
-def response(sock, snp, err_msgs):
+def _response(sock, snp, errors):
     resp = sock.recv(1024).rstrip('\r\n')
     print resp
-    #TODO: check resp for snp error codes, then display error
-    for err_msg in err_msgs:
-        print err_msg
-    print snp + '\n'
+    _error(2, None, errors, None)
+    print snp
 
-def process(action, data, value, req):
-    err_msgs = error()
+def _process(action, data, value, req):
+    errors = _error()
     snp = 'snp://' + action
     param = ''
 
     #Checks if data is required and if values are empty
     for d, v, r in zip(data, value, req):
-        if r is True and len(v) > 0:
+        if r is True and v:
             param = param + '&' + d + v
-        elif r is True and len(v) <= 0:
-            err_msgs = error(True, err_msgs, 109, d)
-        elif r is False and len(v) > 0:
+        elif r is True and not v:
+            errors = _error(1, 'missing', errors, d)
+        elif r is False and v:
             param = param + '&' + d + v
-        elif r is False and len(v) <= 0:
+        else:
             pass
 
     #Checks for errors before sending
-    if not err_msgs:
+    if not errors:
         param = param.replace('&', '?', 1)
         snp = snp + param
-    request(snp, err_msgs)
+    _request(snp, errors)
 
-def error(status=False, err_msgs=[], code=0, obj=''):
-    if status is False and code is 0:
-        err_msgs = []
-    elif status is True and code is 109:
-        err_msg = "*Error: '%s' is missing.*" % obj
-        err_msgs.append(err_msg)
-    return err_msgs
+def _error(mode=0, issue=None, errors=None, obj=None):
+    issue = issue or ''
+    errors = errors or []
+    obj = obj or ''
+
+    if mode is 1 and issue is 'missing':
+        error = "*Error: '%s' is missing.*" % obj
+        errors.append(error)
+    elif mode is 1 and issue is 'noserver':
+        error = "*Error: Can't connect to Snarl.*"
+        errors.append(error)
+    elif mode is 2:
+        for error in errors:
+            print error
+    else:
+        pass
+    return errors
 
 def snRegister(sig, password, title, icon):
     print 'Snarl: Register'
@@ -63,24 +72,25 @@ def snRegister(sig, password, title, icon):
     data = ['app-sig=', 'password=', 'title=', 'icon=']
     value = [sig, password, title, icon]
     req = [True, False, True, False]
-    process(action, data, value, req)
+    _process(action, data, value, req)
 
-def snNotify(sig, uid, password, title, text, icon, cid, timeout, priority):
+def snNotify(sig, password, title, text, icon, cid, uid, timeout, priority):
     print 'Snarl: Notify'
     action = 'notify'
-    data = ['app-sig=', 'uid=', 'password=', 'title=', 'text=', 'icon=',
-            'id=', 'timeout=', 'priority=']
-    value = [sig, uid, password, title, text, icon, cid, timeout, priority]
-    req = [True, False, False, True, True, False, False, False, False]
-    process(action, data, value, req)
+    data = ['app-sig=', 'password=', 'title=', 'text=', 'icon=', 'id=',
+            'uid=', 'timeout=', 'priority=']
+    value = [sig, password, title, text, icon, cid, uid, timeout, priority]
+    req = [True, False, True, True, False, False, False, False, False]
+    _process(action, data, value, req)
 
 def snAddClass(sig, password, title, text, icon, cid, name, enabled):
     print 'Snarl: AddClass'
     action = 'addclass'
-    data = ['app-sig=', 'password=', 'title=', 'text=', 'icon=', 'id=', 'name=', 'enabled=']
+    data = ['app-sig=', 'password=', 'title=', 'text=', 'icon=', 'id=',
+            'name=', 'enabled=']
     value = [sig, password, title, text, icon, cid, name, enabled]
     req = [True, False, False, False, False, True, True, False]
-    process(action, data, value, req)
+    _process(action, data, value, req)
 
 def snVersion():
     print 'Snarl: Version'
@@ -88,7 +98,7 @@ def snVersion():
     data = []
     value = []
     req = []
-    process(action, data, value, req)
+    _process(action, data, value, req)
 
 def snUnregister(sig, password):
     print 'Snarl: Unregister'
@@ -96,4 +106,4 @@ def snUnregister(sig, password):
     data = ['app-sig=', 'password=']
     value = [sig, password]
     req = [True, False]
-    process(action, data, value, req)
+    _process(action, data, value, req)

@@ -13,7 +13,7 @@ name = 'NAME'
 enabled = 'ENABLED'
 
 pySNP.snRegister(sig, password, title, icon)
-pySNP.snNotify(sig, uid, password, title, text, icon, cid, timeout, priority)
+pySNP.snNotify(sig, password, title, text, icon, cid, uid, timeout, priority)
 pySNP.snAddClass(sig, password, title, text, icon, cid, name, enabled)
 pySNP.snVersion()
 pySNP.snUnregister(sig, password)
