@@ -37,19 +37,20 @@ Start by importing pySNP.
 Example:
 
     import pySNP
+    snarl = pySNP.pySNP()
 
 Anything in the list above that is marked _"Required"_, the value of it can go directly inside quotations inside the function call. They NEED to be in the order listed above.
 
 Example:
 
-    pySNP.snRegister('requiredSIG', 'requiredTITLE')
+    snarl.pySNP.snRegister('requiredSIG', 'requiredTITLE')
 
 Anything in the list above that is marked _"Optional"_, the value of it goes after the paramater and equal (=) sign in quoatations.
 
 Example:
 
-    pySNP.snRegister('requiredSIG', 'requiredTITLE', password='optionalPASS', icon='optionalICON')
+    snarl.pySNP.snRegister('requiredSIG', 'requiredTITLE', password='optionalPASS', icon='optionalICON')
 
 ### TODO:
-* move into class
 * add more actions
+* additional tweaks to make it better
