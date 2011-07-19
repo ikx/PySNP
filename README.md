@@ -43,13 +43,13 @@ Anything in the list above that is marked _"Required"_, the value of it can go d
 
 Example:
 
-    snarl.pySNP.snRegister('requiredSIG', 'requiredTITLE')
+    snarl.snRegister('requiredSIG', 'requiredTITLE')
 
 Anything in the list above that is marked _"Optional"_, the value of it goes after the paramater and equal (=) sign in quoatations.
 
 Example:
 
-    snarl.pySNP.snRegister('requiredSIG', 'requiredTITLE', password='optionalPASS', icon='optionalICON')
+    snarl.snRegister('requiredSIG', 'requiredTITLE', password='optionalPASS', icon='optionalICON')
 
 ### TODO:
 * add more actions
