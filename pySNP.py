@@ -3,14 +3,13 @@
 import socket
 
 __author__ = 'Shawn McTear'
-__version__ = '0.0.4'
+__version__ = '0.0.6'
 
 class pySNP(object):
     ip = '127.0.0.1'
     port = 9887
 
     def __init__(self, **host):
-
         if 'ip' in host:
             self.ip = host['ip']
         if 'port' in host:
@@ -63,7 +62,6 @@ class pySNP(object):
         self._request(snp, errors)
 
     def _error(self, mode=0, issue=None, errors=None, obj=None):
-        pass
         issue = issue or ''
         errors = errors or []
         obj = obj or ''
@@ -91,7 +89,7 @@ class pySNP(object):
         self._process(action, data, args)
 
     def snNotify(self, appsig='', title='', text='', **args):
-        print 'Snarl: Register'
+        print 'Snarl: Notify'
         action = 'notify'
         data = {'app-sig': [1, True, appsig],
                 'password': [2, False, ''],
