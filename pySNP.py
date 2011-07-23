@@ -10,13 +10,15 @@ class pySNP(object):
     port = 9887
 
     def __init__(self, **host):
+        """Creates an object of pySNP."""
         if 'ip' in host:
             self.ip = host['ip']
         if 'port' in host:
             self.ip = host['port']
 
     def _request(self, snp, errors):
-        self.sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        """Trys to sends the request to Snarl"""
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.sock.connect((self.ip, self.port))
             self.sock.send(snp + '\r\n')
@@ -29,11 +31,13 @@ class pySNP(object):
         print ''
 
     def _response(self, recv, errors, snp):
+        """Displays Snarl's response"""
         print recv
         self._error(2, None, errors, None)
         print snp
 
     def _process(self, action, data, args):
+        """Processes everything from the actions"""
         errors = self._error()
         snp = 'snp://' + action
         param = ''
@@ -49,7 +53,7 @@ class pySNP(object):
             if value[1] is True and value[2]:
                 param = param + '&' + key + '=' + value[2]
             elif value[1] is True and not value[2]:
-                errors = _error(1, 'missing', errors, key)
+                errors = self._error(1, 'missing', errors, key)
             elif value[1] is False and value[2]:
                 param = param + '&' + key + '=' + value[2]
             else:
@@ -62,6 +66,7 @@ class pySNP(object):
         self._request(snp, errors)
 
     def _error(self, mode=0, issue=None, errors=None, obj=None):
+        """Assigns and displays errors"""
         issue = issue or ''
         errors = errors or []
         obj = obj or ''
@@ -80,6 +85,7 @@ class pySNP(object):
         return errors
 
     def snRegister(self, appsig='', title='', **args):
+        """Snarl's register action"""
         print 'Snarl: Register'
         action = 'register'
         data = {'app-sig': [1, True, appsig],
@@ -89,6 +95,7 @@ class pySNP(object):
         self._process(action, data, args)
 
     def snNotify(self, appsig='', title='', text='', **args):
+        """Snarl's notify action"""
         print 'Snarl: Notify'
         action = 'notify'
         data = {'app-sig': [1, True, appsig],
@@ -103,6 +110,7 @@ class pySNP(object):
         self._process(action, data, args)
 
     def snAddClass(self, appsig='', cid='', cname='', **args):
+        """Snarl's addclass action"""
         print 'Snarl: AddClass'
         action = 'addclass'
         data = {'app-sig': [1, True, appsig],
@@ -116,12 +124,14 @@ class pySNP(object):
         self._process(action, data, args)
 
     def snVersion(self, **args):
+        """Snarl's version action"""
         print 'Snarl: Version'
         action = 'version'
         data = {}
         self._process(action, data, args)
 
     def snUnregister(self, appsig='', **args):
+        """Snarl's unregister action"""
         print 'Snarl: Unregister'
         action = 'unregister'
         data = {'app-sig': [1, True, appsig],
