@@ -10,7 +10,7 @@ pySNP was created to help me learn python and support [Snarl](http://www.fullpha
 * **snNotify**
   * app-sig _(Required)_
   * title _(Required)_
-  * text _(Required)_
+  * text _(Optional)_
   * icon _(Optional)_
   * password _(Optional)_
   * id _(Optional)_

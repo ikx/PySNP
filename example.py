@@ -1,12 +1,11 @@
-import pySNP    
+import pysnp
 
-snarl = pySNP.pySNP()
+sn = pysnp.PySNP()
 
-snarl.snRegister('SIG', 'TITLE', password='testPASS', icon='testICON')
-snarl.snNotify('SIG', 'TITLE', 'TEXT', password='testPASS', icon='testICON')
-snarl.snAddClass('SIG', 'CID', 'CNAME', password='testPASS')
-snarl.snVersion()
-snarl.snUnregister('SIG', password='testPASS')
-
+sn.register('SIG', 'TITLE', password='testPASS', icon='testICON')
+sn.notify('SIG', 'TITLE', 'TEXT', password='testPASS', icon='testICON')
+sn.addclass('SIG', 'CID', 'CNAME', password='testPASS')
+sn.version()
+sn.unregister('SIG', password='testPASS')
 
 #x = raw_input('Hit ANY key to exit')

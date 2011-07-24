@@ -3,67 +3,66 @@
 import socket
 
 __author__ = 'Shawn McTear'
-__version__ = '0.0.6'
+__version__ = '0.1.0'
 
-class pySNP(object):
-    ip = '127.0.0.1'
+class PySNP(object):
+    host = '127.0.0.1'
     port = 9887
 
-    def __init__(self, **host):
+    def __init__(self, **address):
         """Creates an object of pySNP."""
-        if 'ip' in host:
-            self.ip = host['ip']
-        if 'port' in host:
-            self.ip = host['port']
+        if 'host' in address:
+            self.host = address['host']
+        if 'port' in address:
+            self.port = address['port']
 
-    def _request(self, snp, errors):
+    def _send(self, request, errors):
         """Trys to sends the request to Snarl"""
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
-            self.sock.connect((self.ip, self.port))
-            self.sock.send(snp + '\r\n')
+            self.sock.connect((self.host, self.port))
+            self.sock.send(request + '\r\n')
             recv = self.sock.recv(1024).rstrip('\r\n')
             self.sock.close()
-            self._response(recv, errors, snp)
-        except:
+            self._response(recv, errors, request)
+        except IOError:
             errors = self._error(1, 'noserver', None, None)
             self._error(2, None, errors, None)
-        print ''
 
-    def _response(self, recv, errors, snp):
+    def _response(self, recv, errors, request):
         """Displays Snarl's response"""
         print recv
         self._error(2, None, errors, None)
-        print snp
+        print request
 
     def _process(self, action, data, args):
         """Processes everything from the actions"""
+        print '\nSnarl: %s' % action
         errors = self._error()
-        snp = 'snp://' + action
+        request = 'snp://' + action
         param = ''
 
         # Fills data with info from args if needed
-        for d in data:
-            if d in args:            
-                x = data[d]
-                x[2] = args[d]
+        for val in data:
+            if val in args:
+                data[val][2] = args[val]
 
-        # Checks if data is required and if values are empty
-        for key, value in sorted(data.items(), key=lambda x: x[1]):
-            if value[1] is True and value[2]:
-                param = param + '&' + key + '=' + value[2]
-            elif value[1] is True and not value[2]:
+        # Checks if data is required and if vals are empty
+        for key, val in sorted(data.items(), key=lambda x: x[1]):
+            if val[1] is True and val[2]:
+                param = param + '&' + key + '=' + val[2]
+            elif val[1] is True and not val[2]:
                 errors = self._error(1, 'missing', errors, key)
-            elif value[1] is False and value[2]:
-                param = param + '&' + key + '=' + value[2]
+            elif val[1] is False and val[2]:
+                param = param + '&' + key + '=' + val[2]
             else:
                 pass
 
         # Checks for errors before sending
         if not errors:
             param = param.replace('&', '?', 1)
-            snp = snp + param
-        self._request(snp, errors)
+            request = request + param
+        self._send(request, errors)
 
     def _error(self, mode=0, issue=None, errors=None, obj=None):
         """Assigns and displays errors"""
@@ -84,24 +83,22 @@ class pySNP(object):
             pass
         return errors
 
-    def snRegister(self, appsig='', title='', **args):
+    def register(self, app_sig='', app_title='', **args):
         """Snarl's register action"""
-        print 'Snarl: Register'
         action = 'register'
-        data = {'app-sig': [1, True, appsig],
+        data = {'app-sig': [1, True, app_sig],
                 'password': [2, False, ''],
-                'title': [3, True, title],
+                'title': [3, True, app_title],
                 'icon': [4, False, '']}
         self._process(action, data, args)
 
-    def snNotify(self, appsig='', title='', text='', **args):
+    def notify(self, app_sig='', title='', text='', **args):
         """Snarl's notify action"""
-        print 'Snarl: Notify'
         action = 'notify'
-        data = {'app-sig': [1, True, appsig],
+        data = {'app-sig': [1, True, app_sig],
                 'password': [2, False, ''],
                 'title': [3, True, title],
-                'text': [4, True, text],
+                'text': [4, False, text],
                 'icon': [5, False, ''],
                 'id': [6, False, ''],
                 'uid': [7, False, ''],
@@ -109,11 +106,10 @@ class pySNP(object):
                 'priority': [9, False, '']}
         self._process(action, data, args)
 
-    def snAddClass(self, appsig='', cid='', cname='', **args):
+    def addclass(self, app_sig='', cid='', cname='', **args):
         """Snarl's addclass action"""
-        print 'Snarl: AddClass'
         action = 'addclass'
-        data = {'app-sig': [1, True, appsig],
+        data = {'app-sig': [1, True, app_sig],
                 'password': [2, False, ''],
                 'title': [3, False, ''],
                 'text': [4, False, ''],
@@ -123,17 +119,15 @@ class pySNP(object):
                 'enabled': [8, False, '']}
         self._process(action, data, args)
 
-    def snVersion(self, **args):
+    def version(self, **args):
         """Snarl's version action"""
-        print 'Snarl: Version'
         action = 'version'
         data = {}
         self._process(action, data, args)
 
-    def snUnregister(self, appsig='', **args):
+    def unregister(self, app_sig='', **args):
         """Snarl's unregister action"""
-        print 'Snarl: Unregister'
         action = 'unregister'
-        data = {'app-sig': [1, True, appsig],
+        data = {'app-sig': [1, True, app_sig],
                 'password': [2, False, '']}
         self._process(action, data, args)
